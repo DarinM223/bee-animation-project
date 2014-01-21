@@ -3,15 +3,15 @@
 // Template code for drawing an articulated figure.
 // CS 174A 
 ////////////////////////////////////////////////////
-
+#include <GL/glew.h>
 #ifdef _WIN32
 #include <windows.h>
 #include "GL/glew.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
 #else
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #endif
 
 #include <stdio.h>
@@ -22,7 +22,7 @@
 #ifdef _WIN32
 #include "GL/freeglut.h"
 #else
-#include <GLUT/glut.h>
+#include <GL/glut.h>
 #endif
 
 #include "Ball.h"

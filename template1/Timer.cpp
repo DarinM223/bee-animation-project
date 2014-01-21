@@ -1,6 +1,6 @@
 // Courtesy Alan Gasperini, my roommate
 
-#include "timer.h"
+#include "Timer.h"
 
 #ifdef _WIN32
 #pragma comment(lib, "winmm.lib")
