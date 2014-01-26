@@ -302,6 +302,16 @@ void set_colour(float r, float g, float b)
     glUniform4f(uDiffuse,  diffuse*r,  diffuse*g,  diffuse*b,  1.0f);
     glUniform4f(uSpecular, specular*r, specular*g, specular*b, 1.0f);
 }
+void drawGround();
+void drawBee();
+void drawBody();
+void drawHead();
+void drawTail();
+void drawLeg(int side);
+void drawWings();
+void drawFlowerHead();
+void drawFlowerStem();
+void drawFlower();
 
 /*********************************************************
 **********************************************************
@@ -326,7 +336,7 @@ void display(void)
 
     model_view = mat4(1.0f);
     
-    model_view *= Translate(0.0f, 0.0f, -15.0f);
+    model_view *= Translate(0.0f, -5.0f, -15.0f);
     HMatrix r;
     Ball_Value(Arcball,r);
 
@@ -343,49 +353,12 @@ void display(void)
     // Previously glScalef(Zoom, Zoom, Zoom);
     model_view *= Scale(Zoom);
 
-    model_view *= RotateY(-100*TIME);
-    model_view *= Translate(5, 0, 0);
-    model_view *= RotateY(90);
+    //draw ground
+    drawGround();
 
-    //draw body
-    model_view *= Scale(2, 1, 1);
-    drawCube();
-    model_view *= Scale(.5, 1, 1);
+    drawBee();
 
-    //draw head
-    model_view *= Translate(-1.5, 0, 0);
-    model_view *= Scale(.5, .5, .5);
-    drawSphere();
-    model_view *= Scale(2, 2, 2);
-    model_view *= Translate(1.5, 0, 0);
-
-    //draw tail
-    model_view *= Translate(2.5, 0, 0);
-    model_view *= Scale(1.5, .75, .75);
-    drawSphere();
-    model_view *= Scale(1/1.5, 1/.75, 1/.75);
-
-    //// Draw Something
-    //set_colour(0.8f, 0.8f, 0.8f);
-    //drawSphere();
-
-    //// Previously glTranslatef(3,0,0);
-    //model_view *= Translate(3.0f, 0.0f, 0.0f);
-
-    //// Previously glScalef(3,3,3);
-    //model_view *= Scale(3.0f, 3.0f, 3.0f);
-
-    //set_colour(0.8f, 0.0f, 0.8f);
-    //drawCube();
-
-    //model_view *= Scale(1.0f/3.0f, 1.0f/3.0f, 1.0f/3.0f);
-    //model_view *= Translate(3.0f, 0.0f, 0.0f);
-    //set_colour(0.0f, 1.0f, 0.0f);
-    //drawCone();
-
-    //model_view *= Translate(-9.0f, 0.0f, 0.0f);
-    //set_colour(1.0f, 1.0f, 0.0f);
-    //drawCylinder();
+    drawFlower();
 
     glutSwapBuffers();
     if(Recording == 1)
@@ -527,7 +500,157 @@ int main(int argc, char** argv)
     TM.Reset() ;
     return 0;         // never reached
 }
+void drawGround() {
+    //draw ground
+    mvstack.push(model_view);
+    set_colour(0.0, 1.0, 0.0);
+    model_view *= Translate(0, 0, 0);
+    model_view *= Scale(40, 1, 40);
+    drawCube();
+    model_view = mvstack.pop();
+}
 
+void drawBody() {
+    mvstack.push(model_view);
+    //draw body
+    model_view *= Scale(2, 1, 1);
+    //set color to grey
+    set_colour(.658, .658, .658);
+    drawCube();
+    model_view = mvstack.pop();
+}
+void drawHead() {
+    mvstack.push(model_view);
+    //draw head
+    model_view *= Translate(-1.5, 0, 0);
+    model_view *= Scale(.5, .5, .5);
+    //set color to blue
+    set_colour(0.0, 0.0, 1.0);
+    drawSphere();
+    model_view = mvstack.pop();
+}
+void drawTail() {
+    mvstack.push(model_view);
+    //draw tail
+    model_view *= Translate(2.5, 0, 0);
+    model_view *= Scale(1.5, .75, .75);
+    //set color to yellow
+    set_colour(1.0, 1.0, 0.0);
+    drawSphere();
+    model_view = mvstack.pop();
+}
+void drawBee() {
+    mvstack.push(model_view);
+    //rotate bee
+    model_view *= RotateY(-10*TIME);
+    model_view *= Translate(0, 5, 0);
+    model_view *= Translate(5, .5*sin(100+TIME), 0);
+    model_view *= RotateY(90);
 
+    drawBody();    
+    drawHead();
+    drawTail();
+    drawWings();
 
+    model_view = mvstack.pop();
+}
+void drawWings() {
+        mvstack.push(model_view);
+        set_colour(.658, .658, .658);
+                mvstack.push(model_view);
+                        model_view *= Translate(0, .5, 1.5);
+                        model_view *= Scale(1.0, 0.05, 2);
+                        drawCube();
+                model_view = mvstack.pop();
 
+                mvstack.push(model_view);
+                        model_view *= Translate(0, .5, -1.5);
+                        model_view *= Scale(1.0, 0.05, 2);
+                        drawCube();
+                model_view = mvstack.pop();
+        model_view = mvstack.pop();
+}
+void drawFlowerHead() {
+        mvstack.push(model_view);
+        set_colour(1.0, 0.0, 0.0);
+        model_view *= RotateZ(12*sin(TIME));
+        model_view *= Translate(0, 9.9, 0);
+        model_view *= Scale(1.5, 1.5, 1.5);
+        drawSphere();
+        model_view = mvstack.pop();
+}
+void drawFlowerStem() {
+        mvstack.push(model_view);
+                set_colour(0, 0.5, 0);
+                //#1
+                mvstack.push(model_view);
+                        model_view *= RotateZ(1.25*sin(TIME));
+                        model_view *= Translate(0, 1.0, 0);
+                        model_view *= RotateZ(1.25*sin(TIME));
+                        model_view *= Scale(.15, 1, .15);
+                        drawCube();
+                model_view = mvstack.pop();
+                //#2
+                mvstack.push(model_view);
+                        model_view *= RotateZ(2.5*sin(TIME));
+                        model_view *= Translate(0, 2, 0);
+                        model_view *= RotateZ(2.5*sin(TIME));
+                        model_view *= Scale(.15, 1, .15);
+                        drawCube();
+                model_view = mvstack.pop();
+                //#3
+                mvstack.push(model_view);
+                        model_view *= RotateZ(3.75*sin(TIME));
+                        model_view *= Translate(0, 3, 0);
+                        model_view *= RotateZ(3.75*sin(TIME));
+                        model_view *= Scale(.15, 1, .15);
+                        drawCube();
+                model_view = mvstack.pop();
+                //#4
+                mvstack.push(model_view);
+                        model_view *= RotateZ(5*sin(TIME));
+                        model_view *= Translate(0, 4, 0);
+                        model_view *= RotateZ(5*sin(TIME));
+                        model_view *= Scale(.15, 1, .15);
+                        drawCube();
+                model_view = mvstack.pop();
+                //#5
+                mvstack.push(model_view);
+                        model_view *= RotateZ(6.25*sin(TIME));
+                        model_view *= Translate(0, 5, 0);
+                        model_view *= RotateZ(6.25*sin(TIME));
+                        model_view *= Scale(.15, 1, .15);
+                        drawCube();
+                model_view = mvstack.pop();
+                //#6
+                mvstack.push(model_view);
+                        model_view *= RotateZ(7.5*sin(TIME));
+                        model_view *= Translate(0, 6, 0);
+                        model_view *= RotateZ(7.5*sin(TIME));
+                        model_view *= Scale(.15, 1, .15);
+                        drawCube();
+                model_view = mvstack.pop();
+                //#7
+                mvstack.push(model_view);
+                        model_view *= RotateZ(8.75*sin(TIME));
+                        model_view *= Translate(0, 7, 0);
+                        model_view *= RotateZ(8.75*sin(TIME));
+                        model_view *= Scale(.15, 1, .15);
+                        drawCube();
+                model_view = mvstack.pop();
+                //#8
+                mvstack.push(model_view);
+                        model_view *= RotateZ(10*sin(TIME));
+                        model_view *= Translate(0, 8, 0);
+                        model_view *= RotateZ(10*sin(TIME));
+                        model_view *= Scale(.15, 1, .15);
+                        drawCube();
+                model_view = mvstack.pop();
+        model_view = mvstack.pop();
+}
+void drawFlower() {
+        mvstack.push(model_view);
+        drawFlowerHead();
+        drawFlowerStem();
+        model_view = mvstack.pop();
+}
