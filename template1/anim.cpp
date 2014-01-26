@@ -339,30 +339,53 @@ void display(void)
         
     glUniformMatrix4fv( uView, 1, GL_TRUE, model_view );
 
+
     // Previously glScalef(Zoom, Zoom, Zoom);
     model_view *= Scale(Zoom);
 
-    // Draw Something
-    set_colour(0.8f, 0.8f, 0.8f);
-    drawSphere();
+    model_view *= RotateY(-100*TIME);
+    model_view *= Translate(5, 0, 0);
+    model_view *= RotateY(90);
 
-    // Previously glTranslatef(3,0,0);
-    model_view *= Translate(3.0f, 0.0f, 0.0f);
-
-    // Previously glScalef(3,3,3);
-    model_view *= Scale(3.0f, 3.0f, 3.0f);
-
-    set_colour(0.8f, 0.0f, 0.8f);
+    //draw body
+    model_view *= Scale(2, 1, 1);
     drawCube();
+    model_view *= Scale(.5, 1, 1);
 
-    model_view *= Scale(1.0f/3.0f, 1.0f/3.0f, 1.0f/3.0f);
-    model_view *= Translate(3.0f, 0.0f, 0.0f);
-    set_colour(0.0f, 1.0f, 0.0f);
-    drawCone();
+    //draw head
+    model_view *= Translate(-1.5, 0, 0);
+    model_view *= Scale(.5, .5, .5);
+    drawSphere();
+    model_view *= Scale(2, 2, 2);
+    model_view *= Translate(1.5, 0, 0);
 
-    model_view *= Translate(-9.0f, 0.0f, 0.0f);
-    set_colour(1.0f, 1.0f, 0.0f);
-    drawCylinder();
+    //draw tail
+    model_view *= Translate(2.5, 0, 0);
+    model_view *= Scale(1.5, .75, .75);
+    drawSphere();
+    model_view *= Scale(1/1.5, 1/.75, 1/.75);
+
+    //// Draw Something
+    //set_colour(0.8f, 0.8f, 0.8f);
+    //drawSphere();
+
+    //// Previously glTranslatef(3,0,0);
+    //model_view *= Translate(3.0f, 0.0f, 0.0f);
+
+    //// Previously glScalef(3,3,3);
+    //model_view *= Scale(3.0f, 3.0f, 3.0f);
+
+    //set_colour(0.8f, 0.0f, 0.8f);
+    //drawCube();
+
+    //model_view *= Scale(1.0f/3.0f, 1.0f/3.0f, 1.0f/3.0f);
+    //model_view *= Translate(3.0f, 0.0f, 0.0f);
+    //set_colour(0.0f, 1.0f, 0.0f);
+    //drawCone();
+
+    //model_view *= Translate(-9.0f, 0.0f, 0.0f);
+    //set_colour(1.0f, 1.0f, 0.0f);
+    //drawCylinder();
 
     glutSwapBuffers();
     if(Recording == 1)
