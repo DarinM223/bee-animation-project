@@ -357,7 +357,6 @@ void display(void)
     drawGround();
 
     drawBee();
-
     drawFlower();
 
     glutSwapBuffers();
@@ -503,7 +502,7 @@ int main(int argc, char** argv)
 void drawGround() {
     //draw ground
     mvstack.push(model_view);
-    set_colour(0.0, 1.0, 0.0);
+    set_colour(0.0, 0.5, 0.0);
     model_view *= Translate(0, 0, 0);
     model_view *= Scale(40, 1, 40);
     drawCube();
@@ -543,6 +542,8 @@ void drawBee() {
     mvstack.push(model_view);
     //rotate bee
     model_view *= RotateY(-10*TIME);
+    //spinzaku mode
+    //model_view *= RotateY(-1000*TIME);
     model_view *= Translate(0, 5, 0);
     model_view *= Translate(5, .5*sin(100+TIME), 0);
     model_view *= RotateY(90);
@@ -551,6 +552,8 @@ void drawBee() {
     drawHead();
     drawTail();
     drawWings();
+    drawLeg(0);
+    drawLeg(1);
 
     model_view = mvstack.pop();
 }
@@ -558,16 +561,25 @@ void drawWings() {
         mvstack.push(model_view);
         set_colour(.658, .658, .658);
                 mvstack.push(model_view);
-                        model_view *= Translate(0, .5, 1.5);
+                        model_view *= Translate(0, .5, -.5);
+                        model_view *= RotateX(50*sin(TIME));
+                        model_view *= Translate(0, 0.0, -1);
                         model_view *= Scale(1.0, 0.05, 2);
                         drawCube();
                 model_view = mvstack.pop();
 
                 mvstack.push(model_view);
-                        model_view *= Translate(0, .5, -1.5);
+                        model_view *= Translate(0, .5, .5);
+                        model_view *= RotateX(-50*sin(TIME));
+                        model_view *= Translate(0, 0.0, 1);
                         model_view *= Scale(1.0, 0.05, 2);
                         drawCube();
                 model_view = mvstack.pop();
+        model_view = mvstack.pop();
+}
+void drawLeg(int side) {
+        mvstack.push(model_view);
+        
         model_view = mvstack.pop();
 }
 void drawFlowerHead() {
@@ -581,7 +593,7 @@ void drawFlowerHead() {
 }
 void drawFlowerStem() {
         mvstack.push(model_view);
-                set_colour(0, 0.5, 0);
+                set_colour(0.5, 0.35, 0.05);
                 //#1
                 mvstack.push(model_view);
                         model_view *= RotateZ(1.25*sin(TIME));
@@ -648,6 +660,7 @@ void drawFlowerStem() {
                 model_view = mvstack.pop();
         model_view = mvstack.pop();
 }
+
 void drawFlower() {
         mvstack.push(model_view);
         drawFlowerHead();
