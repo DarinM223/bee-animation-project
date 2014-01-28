@@ -308,6 +308,7 @@ void drawBody();
 void drawHead();
 void drawTail();
 void drawLeg(int side);
+void drawLegz();
 void drawWings();
 void drawFlowerHead();
 void drawFlowerStem();
@@ -355,7 +356,6 @@ void display(void)
 
     //draw ground
     drawGround();
-
     drawBee();
     drawFlower();
 
@@ -552,8 +552,7 @@ void drawBee() {
     drawHead();
     drawTail();
     drawWings();
-    drawLeg(0);
-    drawLeg(1);
+    drawLegz();
 
     model_view = mvstack.pop();
 }
@@ -578,9 +577,66 @@ void drawWings() {
         model_view = mvstack.pop();
 }
 void drawLeg(int side) {
-        mvstack.push(model_view);
-        
-        model_view = mvstack.pop();
+        if (side == 0) { //if left leg
+                mvstack.push(model_view); //draw thigh
+                        mvstack.push(model_view);
+                                model_view *= Translate(0, -.25, -.25);
+                                model_view *= RotateX(-abs(20 * sin(.5 * TIME)));
+                                model_view *= Translate(0, -.5, -.25);
+                                //model_view *= RotateX(30);
+                                model_view *= Scale(.15, .6, .15);
+                                drawCube();
+                        model_view = mvstack.pop();
+                        model_view *= Translate(0, -.45, 0);
+                        model_view *= RotateX(-abs(20*sin(.5*TIME)));
+                         mvstack.push(model_view);
+                                 model_view *= Translate(0, -.25, -.25);
+                                 model_view *= RotateX(-abs(20 * sin(.5 * TIME)));
+                                 model_view *= Translate(0, -.5, -.25);
+                                 //model_view *= RotateX(30);
+                                 model_view *= Scale(.15, .6, .15);
+                                 drawCube();
+                         model_view = mvstack.pop();
+                model_view = mvstack.pop();
+        } else if (side == 1) { //if right leg
+                mvstack.push(model_view); //draw thigh
+                        mvstack.push(model_view);
+                                model_view *= Translate(0, -.25, .25);
+                                model_view *= RotateX(abs(20 * sin(.5 * TIME)));
+                                model_view *= Translate(0, -.5, .25);
+                                //model_view *= RotateX(30);
+                                model_view *= Scale(.15, .6, .15);
+                                drawCube();
+                        model_view = mvstack.pop();
+                        model_view *= Translate(0, -.45, 0);
+                        model_view *= RotateX(abs(20*sin(.5*TIME)));
+                         mvstack.push(model_view);
+                                 model_view *= Translate(0, -.25, .25);
+                                 model_view *= RotateX(abs(20 * sin(.5 * TIME)));
+                                 model_view *= Translate(0, -.5, .25);
+                                 //model_view *= RotateX(30);
+                                 model_view *= Scale(.15, .6, .15);
+                                 drawCube();
+                         model_view = mvstack.pop();
+                model_view = mvstack.pop();
+        }
+}
+void drawLegz() {
+    mvstack.push(model_view);
+        drawLeg(0);
+        model_view *= Translate(-.5, 0, 0);
+        drawLeg(0);
+        model_view *= Translate(1, 0, 0);
+        drawLeg(0);
+    model_view = mvstack.pop();
+
+    mvstack.push(model_view);
+        drawLeg(1);
+        model_view *= Translate(-.5, 0, 0);
+        drawLeg(1);
+        model_view *= Translate(1, 0, 0);
+        drawLeg(1);
+    model_view = mvstack.pop();
 }
 void drawFlowerHead() {
         mvstack.push(model_view);
