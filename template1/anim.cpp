@@ -354,7 +354,7 @@ void display(void)
     // Previously glScalef(Zoom, Zoom, Zoom);
     model_view *= Scale(Zoom);
 
-    //draw ground
+    //draw objects
     drawGround();
     drawBee();
     drawFlower();
@@ -542,12 +542,11 @@ void drawBee() {
     mvstack.push(model_view);
     //rotate bee
     model_view *= RotateY(-10*TIME);
-    //spinzaku mode
-    //model_view *= RotateY(-1000*TIME);
     model_view *= Translate(0, 5, 0);
     model_view *= Translate(5, .5*sin(100+TIME), 0);
     model_view *= RotateY(90);
 
+    //draw bee parts
     drawBody();    
     drawHead();
     drawTail();
@@ -559,7 +558,7 @@ void drawBee() {
 void drawWings() {
         mvstack.push(model_view);
         set_colour(.658, .658, .658);
-                mvstack.push(model_view);
+                mvstack.push(model_view); //draw first wing
                         model_view *= Translate(0, .5, -.5);
                         model_view *= RotateX(50*sin(TIME));
                         model_view *= Translate(0, 0.0, -1);
@@ -567,7 +566,7 @@ void drawWings() {
                         drawCube();
                 model_view = mvstack.pop();
 
-                mvstack.push(model_view);
+                mvstack.push(model_view); //draw second wing
                         model_view *= Translate(0, .5, .5);
                         model_view *= RotateX(-50*sin(TIME));
                         model_view *= Translate(0, 0.0, 1);
@@ -583,20 +582,18 @@ void drawLeg(int side) {
                                 model_view *= Translate(0, -.25, -.25);
                                 model_view *= RotateX(-abs(20 * sin(.5 * TIME)));
                                 model_view *= Translate(0, -.5, -.25);
-                                //model_view *= RotateX(30);
                                 model_view *= Scale(.15, .6, .15);
                                 drawCube();
                         model_view = mvstack.pop();
-                        model_view *= Translate(0, -.45, 0);
-                        model_view *= RotateX(-abs(20*sin(.5*TIME)));
-                         mvstack.push(model_view);
-                                 model_view *= Translate(0, -.25, -.25);
-                                 model_view *= RotateX(-abs(20 * sin(.5 * TIME)));
-                                 model_view *= Translate(0, -.5, -.25);
-                                 //model_view *= RotateX(30);
-                                 model_view *= Scale(.15, .6, .15);
-                                 drawCube();
-                         model_view = mvstack.pop();
+                        model_view *= Translate(0, -.45, 0); //move down to draw foot
+                        model_view *= RotateX(-abs(20*sin(.5*TIME))); //apply rotation to foot
+                        mvstack.push(model_view); //draw foot
+                                model_view *= Translate(0, -.25, -.25);
+                                model_view *= RotateX(-abs(20 * sin(.5 * TIME)));
+                                model_view *= Translate(0, -.5, -.25);
+                                model_view *= Scale(.15, .6, .15);
+                                drawCube();
+                        model_view = mvstack.pop();
                 model_view = mvstack.pop();
         } else if (side == 1) { //if right leg
                 mvstack.push(model_view); //draw thigh
@@ -604,24 +601,23 @@ void drawLeg(int side) {
                                 model_view *= Translate(0, -.25, .25);
                                 model_view *= RotateX(abs(20 * sin(.5 * TIME)));
                                 model_view *= Translate(0, -.5, .25);
-                                //model_view *= RotateX(30);
                                 model_view *= Scale(.15, .6, .15);
                                 drawCube();
                         model_view = mvstack.pop();
-                        model_view *= Translate(0, -.45, 0);
-                        model_view *= RotateX(abs(20*sin(.5*TIME)));
-                         mvstack.push(model_view);
-                                 model_view *= Translate(0, -.25, .25);
-                                 model_view *= RotateX(abs(20 * sin(.5 * TIME)));
-                                 model_view *= Translate(0, -.5, .25);
-                                 //model_view *= RotateX(30);
-                                 model_view *= Scale(.15, .6, .15);
-                                 drawCube();
-                         model_view = mvstack.pop();
+                        model_view *= Translate(0, -.45, 0); //move down to draw foot
+                        model_view *= RotateX(abs(20*sin(.5*TIME))); //apply rotation to foot
+                        mvstack.push(model_view); //draw foot
+                                model_view *= Translate(0, -.25, .25);
+                                model_view *= RotateX(abs(20 * sin(.5 * TIME)));
+                                model_view *= Translate(0, -.5, .25);
+                                model_view *= Scale(.15, .6, .15);
+                                drawCube();
+                        model_view = mvstack.pop();
                 model_view = mvstack.pop();
         }
 }
 void drawLegz() {
+    //draw left legs
     mvstack.push(model_view);
         drawLeg(0);
         model_view *= Translate(-.5, 0, 0);
@@ -630,6 +626,7 @@ void drawLegz() {
         drawLeg(0);
     model_view = mvstack.pop();
 
+    //draw right legs
     mvstack.push(model_view);
         drawLeg(1);
         model_view *= Translate(-.5, 0, 0);
@@ -650,6 +647,7 @@ void drawFlowerHead() {
 void drawFlowerStem() {
         mvstack.push(model_view);
                 set_colour(0.5, 0.35, 0.05);
+                //draw pieces of the stem
                 //#1
                 mvstack.push(model_view);
                         model_view *= RotateZ(1.25*sin(TIME));
@@ -718,6 +716,7 @@ void drawFlowerStem() {
 }
 
 void drawFlower() {
+        //draw the flower parts
         mvstack.push(model_view);
         drawFlowerHead();
         drawFlowerStem();
