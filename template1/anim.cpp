@@ -561,7 +561,7 @@ void drawWings() {
                 mvstack.push(model_view); //draw first wing
                         model_view *= Translate(0, .5, -.5);
                         model_view *= RotateX(50*sin(TIME));
-                        model_view *= Translate(0, 0.0, -1);
+                        model_view *= Translate(0, 0.025, -1);
                         model_view *= Scale(1.0, 0.05, 2);
                         drawCube();
                 model_view = mvstack.pop();
@@ -569,7 +569,7 @@ void drawWings() {
                 mvstack.push(model_view); //draw second wing
                         model_view *= Translate(0, .5, .5);
                         model_view *= RotateX(-50*sin(TIME));
-                        model_view *= Translate(0, 0.0, 1);
+                        model_view *= Translate(0, 0.025, 1);
                         model_view *= Scale(1.0, 0.05, 2);
                         drawCube();
                 model_view = mvstack.pop();
@@ -578,38 +578,36 @@ void drawWings() {
 void drawLeg(int side) {
         if (side == 0) { //if left leg
                 mvstack.push(model_view); //draw thigh
+                        model_view *= Translate(0, -.5, -.5);
+                        model_view *= RotateX(-abs(20 * sin(.5 * TIME)));
                         mvstack.push(model_view);
-                                model_view *= Translate(0, -.25, -.25);
-                                model_view *= RotateX(-abs(20 * sin(.5 * TIME)));
-                                model_view *= Translate(0, -.5, -.25);
+                                model_view *= Translate(0, -.3, -.075);
                                 model_view *= Scale(.15, .6, .15);
                                 drawCube();
                         model_view = mvstack.pop();
-                        model_view *= Translate(0, -.45, 0); //move down to draw foot
-                        model_view *= RotateX(-abs(20*sin(.5*TIME))); //apply rotation to foot
+
+                        model_view *= Translate(0, -.6, 0); //move down to draw foot
                         mvstack.push(model_view); //draw foot
-                                model_view *= Translate(0, -.25, -.25);
                                 model_view *= RotateX(-abs(20 * sin(.5 * TIME)));
-                                model_view *= Translate(0, -.5, -.25);
+                                model_view *= Translate(0, -.3, -.075);
                                 model_view *= Scale(.15, .6, .15);
                                 drawCube();
                         model_view = mvstack.pop();
                 model_view = mvstack.pop();
         } else if (side == 1) { //if right leg
                 mvstack.push(model_view); //draw thigh
+                        model_view *= Translate(0, -.5, .5);
+                        model_view *= RotateX(abs(20 * sin(.5 * TIME)));
                         mvstack.push(model_view);
-                                model_view *= Translate(0, -.25, .25);
-                                model_view *= RotateX(abs(20 * sin(.5 * TIME)));
-                                model_view *= Translate(0, -.5, .25);
+                                model_view *= Translate(0, -.3, .075);
                                 model_view *= Scale(.15, .6, .15);
                                 drawCube();
                         model_view = mvstack.pop();
-                        model_view *= Translate(0, -.45, 0); //move down to draw foot
-                        model_view *= RotateX(abs(20*sin(.5*TIME))); //apply rotation to foot
+
+                        model_view *= Translate(0, -.6, 0); //move down to draw foot
                         mvstack.push(model_view); //draw foot
-                                model_view *= Translate(0, -.25, .25);
                                 model_view *= RotateX(abs(20 * sin(.5 * TIME)));
-                                model_view *= Translate(0, -.5, .25);
+                                model_view *= Translate(0, -.3, .075);
                                 model_view *= Scale(.15, .6, .15);
                                 drawCube();
                         model_view = mvstack.pop();
