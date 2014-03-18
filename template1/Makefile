@@ -41,7 +41,7 @@ MAIN = test
 .PHONY: depend clean
 
 all:    $(MAIN)
-	@echo  Simple compiler named mycc has been compiled
+	@echo Graphics program has been compiled, son!!! 
 
 $(MAIN): $(OBJS) 
 	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
